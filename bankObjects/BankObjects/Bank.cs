@@ -8,25 +8,29 @@ namespace BankObjects
 {
     class Bank
     {
-        private string _name;
-        private string[] _accounts;
+        private string _bankname;
+        private List<BankAccount> _accounts;
 
-        public Bank()
+        public Bank(string bankName)
         {
+            _bankname = bankName;
         }
 
         public string CreateNewAccount()
-        {     Random rnd = new Random();
+        {
+            Random rnd = new Random();
             string accountNumber = "FI";
             for (int i = 0; i < 16; i++)
             {
-           
                 int newNumber = rnd.Next(10);
                 accountNumber += newNumber;
             }
+            BankAccount = new BankAccount(accountNumber);
 
             return accountNumber;
         }
+
+
 
     }
 }
