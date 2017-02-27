@@ -10,12 +10,17 @@ namespace BankObjects
     {
         static void Main(string[] args)
         {
-            Bank bank = new Bank();
+            //Bank bank = new Bank();
 
-            for (int i = 0; i < 30; i++)
-            {
-                string newAccount = bank.CreateNewAccount();
-            }
+            //for (int i = 0; i < 30; i++)
+            //{
+            //    string newAccount = bank.CreateNewAccount();
+            //}
+
+            decimal ff = 1.44444444m;
+
+            decimal dd = decimal.Round(ff, 1, MidpointRounding.ToEven);
+            int t = 0;
 
         }
     }

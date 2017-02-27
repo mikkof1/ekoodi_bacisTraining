@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankObjects
 {
-    class BankAccount
+    public class BankAccount
     {
         private string _accountNumber;
         private List<AccountActivity> _accountActivityList;
@@ -18,6 +18,11 @@ namespace BankObjects
             StartNewAccountActivity();
         }
 
+        public string AccountNumber
+        {
+            get { return _accountNumber; }
+        }
+
         public List<AccountActivity> AccountActivityList
         {
             get { return _accountActivityList; }
@@ -27,6 +32,7 @@ namespace BankObjects
         {
             get { return _money; }
         }
+
 
         public string GetActivityListString()
         {
@@ -69,7 +75,7 @@ namespace BankObjects
             }
             return returnValue;
         }
-        
+
 
         public void AddMoneyActivity(double money)
         {

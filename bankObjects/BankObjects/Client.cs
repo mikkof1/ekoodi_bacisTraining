@@ -12,8 +12,11 @@ namespace BankObjects
         private string _lastName;
         private string _accountNumber;
 
-        public Client()
+        public Client(string firstName, string lastName, string accountNumber)
         {
+            _firstName = firstName;
+            _lastName = lastName;
+            _accountNumber = accountNumber;
         }
 
         public string FirstName
@@ -31,7 +34,6 @@ namespace BankObjects
         public string AccountNumber
         {
             get { return _accountNumber; }
-            set { _accountNumber = value; }
         }
         
         public override string ToString()
