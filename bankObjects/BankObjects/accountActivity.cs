@@ -8,24 +8,22 @@ namespace BankObjects
 {
     public class AccountActivity
     {
-        private DateTime _timeStamp;
-        private string _moneyTransfer;
+        private readonly DateTime _timeStamp;
+        private readonly double _money;
 
-        public AccountActivity( string moneyTransfer)
+        public AccountActivity( double money, DateTime date)
         {
-            _timeStamp = DateTime.Now; 
-            _moneyTransfer = moneyTransfer;
+            _timeStamp = date; 
+            _money = money;
         }
 
-        public DateTime TimeStamp
-        {
-            get { return _timeStamp; }
-        }
+        public DateTime TimeStamp => _timeStamp;
 
-        public string MoneyTransfer
-        {
-            get { return _moneyTransfer; }
-        }
+        public double Money => _money;
 
+        public override string ToString()
+        {
+            return _timeStamp + " : " + _money;
+        }
     }
 }

@@ -9,14 +9,13 @@ namespace BankObjects
     class Bank
     {
         private string _bankname;
-        private List<BankAccount> _bankAccountsList;
-        private List<Client> _clientList;
+        private readonly List<BankAccount> _bankAccountsList;
+        private readonly Random _rnd = new Random();
 
         public Bank(string bankName)
         {
             _bankname = bankName;
             _bankAccountsList = new List<BankAccount>();
-            _clientList = new List<Client>();
         }
 
         public string CreateNewAccount(string firstName, string lastName)
@@ -26,89 +25,50 @@ namespace BankObjects
             BankAccount newBankAccount = new BankAccount(accountNumber);
             _bankAccountsList.Add(newBankAccount);
 
-            Client newClient = new Client(firstName, lastName, accountNumber);
-            _clientList.Add(newClient);
-
             return accountNumber;
         }
 
-
-        public string GetClientAccountActivitys(string accountNumber)
+        public bool ClientMoneyTransfer(string accountNumber, double money, DateTime date)
         {
             BankAccount clientAccount = GetClientBankAccount(accountNumber);
             if (clientAccount == null)
-                return "Wrong account number";
-            return clientAccount.GetActivityListString();
+                return false;
+
+            clientAccount.MoneyActivity(money, date);
+            return true;
         }
-
-        public string GetClientAccountActivitys(string accountNumber, DateTime startDate, DateTime endDate)
-        {
-            BankAccount clientAccount = GetClientBankAccount(accountNumber);
-            if (clientAccount == null)
-                return "Wrong account number";
-
-            return clientAccount.GetActivityListString(startDate, endDate);
-        }
-
 
         public double GetClientMoney(string accountNumber)
         {
             BankAccount clientAccount = GetClientBankAccount(accountNumber);
-            if (clientAccount == null)
-                return 0;
-
-            return clientAccount.Money;
+            return clientAccount?.Money ?? 0; // Wrong, can't return 0 money if account not found
         }
 
-        public bool AddClientMoney(string accountNumber, double money)
+        public List<AccountActivity> GetClientActivitys(string accountNumber)
         {
             BankAccount clientAccount = GetClientBankAccount(accountNumber);
-            if (clientAccount == null)
-                return false;
-
-            clientAccount.AddMoneyActivity(money);
-
-            return true;
+            List<AccountActivity> returnList = clientAccount?.AccountActivityList;
+            return returnList;
         }
 
-        public bool TakeClientMoney(string accountNumber, double money)
+        public List<AccountActivity> GetClientActivitys(string accountNumber, DateTime startDate, DateTime endDate)
         {
             BankAccount clientAccount = GetClientBankAccount(accountNumber);
-            if (clientAccount == null)
-                return false;
-
-            clientAccount.TakeMoneyActivity(money);
-
-            return true;
+            List<AccountActivity> returnList = clientAccount?.GetActivitysSelectedList(startDate, endDate);
+            return returnList;
         }
-
-        public string PrintAllClientDetalies()
-        {
-            string returnValue = "";
-
-            int clientIndex = 0;
-            foreach (Client client in _clientList)
-            {
-                BankAccount clientBankAccount = GetClientBankAccount(client.AccountNumber);
-                returnValue += client.ToString() + " : " + clientBankAccount.Money+"€";
-                clientIndex++;
-                if (clientIndex < _clientList.Count)
-                {
-                    returnValue += "\r\n";
-                }
-            }
-
-            return returnValue;
-        }
-
         
+
+        // ***************************************************************************************************
+        // private Functions 
+        // ***************************************************************************************************
+
         private string MakeRandomAccountNumber()
         {
-            Random rnd = new Random();
             string accountNumber = "FI";
             for (int i = 0; i < 16; i++)
             {
-                int newNumber = rnd.Next(10);
+                int newNumber = _rnd.Next(10);
                 accountNumber += newNumber;
             }
             return accountNumber;
@@ -116,18 +76,10 @@ namespace BankObjects
 
         private BankAccount GetClientBankAccount(string accountNumber)
         {
-
-            foreach (BankAccount account in _bankAccountsList)
-            {
-                if (account.AccountNumber == accountNumber)
-                {
-                    return account;
-                }
-            }
-            return null;
+            return (from account in _bankAccountsList
+                    where account.AccountNumber == accountNumber
+                    select account).FirstOrDefault();
         }
-
-
 
     }
 }
